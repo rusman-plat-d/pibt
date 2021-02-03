@@ -123,6 +123,10 @@
               "devServerTarget": "pibt:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     }

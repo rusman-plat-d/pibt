@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "pragmainf-backlog-task": {
+      "hosting": {
+        "pibt": [
+          "pragmainf-backlog-task"
+        ]
+      }
+    }
+  }
+}
