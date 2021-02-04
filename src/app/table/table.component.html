@@ -1,76 +1,102 @@
-<table mat-table>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let row"> {{row.name}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="project">
-        <th mat-header-cell *matHeaderCellDef> Project </th>
-        <td mat-cell *matCellDef="let row"> {{row.project}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="product">
-        <th mat-header-cell *matHeaderCellDef> Product </th>
-        <td mat-cell *matCellDef="let row"> {{row.product}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="additionTask">
-        <th mat-header-cell *matHeaderCellDef> Addition Task </th>
-        <td mat-cell *matCellDef="let row"> {{row.additionTask}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="module">
-        <th mat-header-cell *matHeaderCellDef> Module </th>
-        <td mat-cell *matCellDef="let row"> {{row.module}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="date_start">
-        <th mat-header-cell *matHeaderCellDef> Date Start </th>
-        <td mat-cell *matCellDef="let row"> {{row.date_start}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="date_target">
-        <th mat-header-cell *matHeaderCellDef> Date Target </th>
-        <td mat-cell *matCellDef="let row"> {{row.date_target}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="date_finish">
-        <th mat-header-cell *matHeaderCellDef> Date Finish </th>
-        <td mat-cell *matCellDef="let row"> {{row.date_finish}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="activity">
-        <th mat-header-cell *matHeaderCellDef> Activity </th>
-        <td mat-cell *matCellDef="let row"> {{row.activity}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef> Status </th>
-        <td mat-cell *matCellDef="let row"> {{row.status}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="effort">
-        <th mat-header-cell *matHeaderCellDef> Effort </th>
-        <td mat-cell *matCellDef="let row"> {{row.effort}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="blockers">
-        <th mat-header-cell *matHeaderCellDef> Blockers </th>
-        <td mat-cell *matCellDef="let row"> {{row.blockers}} </td>
-    </ng-container>
-</table>
+<div>
+    <mat-toolbar color='primary' dense>
+        <!-- <button *ngIf='showAddMenu' (click)='add.next()' mat-button>
+            <mat-icon>add</mat-icon>Tambah
+        </button> -->
+        <!-- <button (click)='filterColumn()' mat-button>
+            <mat-icon>view_column</mat-icon> Kolom
+        </button> -->
+        <button *ngIf='!search' (click)='search=true' mat-button>
+            <mat-icon>search</mat-icon>Cari
+        </button>
+        <button *ngIf='search' (click)='search=false' mat-button>
+            <mat-icon>clear</mat-icon>Tutup
+        </button>
+        <button *ngIf='filtered' (click)='filterForm!.reset()' mat-button>
+            <mat-icon>delete</mat-icon>Bersihkan Pencarian
+        </button>
+    </mat-toolbar>
+    <form *ngIf='filterForm' [formGroup]='filterForm'>
+        <table mat-table class="full-width-table" [dataSource]="dataSource" matSort>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+            </ng-container>
+    
+            <!-- Project Column -->
+            <ng-container matColumnDef="project">
+                <th mat-header-cell *matHeaderCellDef> Project </th>
+                <td mat-cell *matCellDef="let row"> {{row.project}} </td>
+            </ng-container>
+    
+            <!-- Product Column -->
+            <ng-container matColumnDef="product">
+                <th mat-header-cell *matHeaderCellDef> Product </th>
+                <td mat-cell *matCellDef="let row"> {{row.product}} </td>
+            </ng-container>
+    
+            <!-- Addition Task Column -->
+            <ng-container matColumnDef="additionTask">
+                <th mat-header-cell *matHeaderCellDef> Addition Task </th>
+                <td mat-cell *matCellDef="let row"> {{row.additionTask}} </td>
+            </ng-container>
+    
+            <!-- Module Column -->
+            <ng-container matColumnDef="module">
+                <th mat-header-cell *matHeaderCellDef> Module </th>
+                <td mat-cell *matCellDef="let row"> {{row.module}} </td>
+            </ng-container>
+    
+            <!-- Date Start Column -->
+            <ng-container matColumnDef="date_start">
+                <th mat-header-cell *matHeaderCellDef> Date Start </th>
+                <td mat-cell *matCellDef="let row"> {{row.date_start}} </td>
+            </ng-container>
+    
+            <!-- Date Target Column -->
+            <ng-container matColumnDef="date_target">
+                <th mat-header-cell *matHeaderCellDef> Date Target </th>
+                <td mat-cell *matCellDef="let row"> {{row.date_target}} </td>
+            </ng-container>
+    
+            <!-- Date Finish Column -->
+            <ng-container matColumnDef="date_finish">
+                <th mat-header-cell *matHeaderCellDef> Date Finish </th>
+                <td mat-cell *matCellDef="let row"> {{row.date_finish}} </td>
+            </ng-container>
+    
+            <!-- Activity Column -->
+            <ng-container matColumnDef="activity">
+                <th mat-header-cell *matHeaderCellDef> Activity </th>
+                <td mat-cell *matCellDef="let row"> {{row.activity}} </td>
+            </ng-container>
+    
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef> Status </th>
+                <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+            </ng-container>
+    
+            <!-- Effort Column -->
+            <ng-container matColumnDef="effort">
+                <th mat-header-cell *matHeaderCellDef> Effort </th>
+                <td mat-cell *matCellDef="let row"> {{row.effort}} </td>
+            </ng-container>
+    
+            <!-- Blockers Column -->
+            <ng-container matColumnDef="blockers">
+                <th mat-header-cell *matHeaderCellDef> Blockers </th>
+                <td mat-cell *matCellDef="let row"> {{row.blockers}} </td>
+            </ng-container>
+        </table>
+    </form>
+    <mat-paginator #paginator
+        [length]="dataSource.data.length"
+        [pageIndex]="0" [pageSize]="10"
+        [pageSizeOptions]="[10,25,50,100]">
+    </mat-paginator>
+</div>
