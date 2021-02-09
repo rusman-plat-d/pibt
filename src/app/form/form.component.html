@@ -1,1 +1,102 @@
-<p>form works!</p>
+<form [formGroup]='formGroup' (ngSubmit)='onSubmit'>
+    <div style="display: inline-block;margin-right: 1%; width: 49%">
+        <div>
+            <mat-form-field>
+                <mat-select formControlName="name" placeholder='Nama Personil' required>
+                    <mat-option>
+                        <ngx-mat-select-search [formControl]="nameFilterCtrl" placeholderLabel='Cari Personil'>
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor='let item of (personil$ | async); trackBy: personilTrackByFn' [value]='item.nama'>{{
+                        item.panggilan }} - {{ item.nama }} </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Project</mat-label>
+                <input matInput formControlName="project" name='project' required>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Product</mat-label>
+                <input matInput formControlName="product" name='product'>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Addition Task</mat-label>
+                <input matInput formControlName="additionTask" name='additionTask' required>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Module</mat-label>
+                <input matInput formControlName="module" name='module' required>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Date Start</mat-label>
+                <input matInput [matDatepicker]='dateStartPicker' formControlName="date_start" name='date_start' readonly>
+                <mat-datepicker-toggle matSuffix [for]="dateStartPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dateStartPicker></mat-datepicker>
+            </mat-form-field>
+        </div>
+    </div>
+    <div style="display: inline-block;margin-left: 1%; width: 49%">
+        <div>
+            <mat-form-field>
+                <mat-label>Date Target</mat-label>
+                <input matInput [matDatepicker]='dateTargetPicker' formControlName="date_target" name='date_target' readonly>
+                <mat-datepicker-toggle matSuffix [for]="dateTargetPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dateTargetPicker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Date Finish</mat-label>
+                <input matInput [matDatepicker]='dateFinishPicker' formControlName="date_finish" name='date_finish' readonly>
+                <mat-datepicker-toggle matSuffix [for]="dateFinishPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dateFinishPicker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Activity</mat-label>
+                <input matInput formControlName="activity" name='activity' required>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-select formControlName="status" placeholder='Status' required>
+                    <mat-option value='Off Track'>Off Track</mat-option>
+                    <mat-option value='On Track'>On Track</mat-option>
+                    <mat-option value='At Risk'>At Risk</mat-option>
+                    <mat-option value='Completed'>Completed</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-select formControlName="effort" placeholder='Effort' required>
+                    <mat-option value='Small'>Small</mat-option>
+                    <mat-option value='Medium'>Medium</mat-option>
+                    <mat-option value='Large'>Large</mat-option>
+                    <mat-option value='Extra Large'>Extra Large</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div>
+            <mat-form-field>
+                <mat-label>Blockers</mat-label>
+                <input matInput formControlName="blockers" name='blockers'>
+            </mat-form-field>
+        </div>
+    </div>
+    
+    <div>
+        <button color='primary' mat-raised-button type="submit">Submit</button>
+    </div>
+</form>

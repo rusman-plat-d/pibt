@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -23,6 +24,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -48,6 +51,7 @@ import { environment } from '../environments/environment';
     AngularFireAnalyticsModule,
     AngularFirestoreModule,
 
+    MatNativeDateModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
@@ -64,6 +68,8 @@ import { environment } from '../environments/environment';
     MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
+
+    NgxMatSelectSearchModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

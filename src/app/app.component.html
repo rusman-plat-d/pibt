@@ -2,10 +2,14 @@
   <span>Backlog & Task</span>
   <span style="flex: 1 auto"></span>
   <ng-container *ngIf='authService.auth.user | async as user; else login'>
-    <span>{{ user.displayName + '&nbsp;&nbsp;&nbsp; |' }}</span>
+    <span>{{ user.displayName + '&nbsp;&nbsp;&nbsp;' }}</span>
     <button mat-button (click)='authService.logout()'>Logout</button>
   </ng-container>
   <ng-template #login>
     <button  mat-button (click)='authService.login()'>Login</button>
   </ng-template>
 </mat-toolbar>
+
+<div>
+  <app-table style='width: 100%'></app-table>
+</div>

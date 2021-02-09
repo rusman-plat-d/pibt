@@ -17,6 +17,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 
 import { Subscription } from "rxjs";
 import { takeWhile } from "rxjs/operators";
+import { FormComponent } from '../form/form.component';
 
 export interface Log {
   id: string;
@@ -67,7 +68,7 @@ export class TableComponent implements OnDestroy, OnInit {
   }
   
   get filtered() {
-		return Object.keys(this.filterForm!.value).some(
+		return Object.keys(this.filterForm?.value || '').some(
 			col => !!this.filterForm!.value[col]
 		);
 	}
@@ -80,11 +81,11 @@ export class TableComponent implements OnDestroy, OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
 		this.dataSource.sort = this.sort;
-    this.buildFilterForm();
   }
   ngOnDestroy(): void {
   }
   ngOnInit(): void {
+    this.buildFilterForm();
     // this.dataSource.filterPredicate = (col, filter) => {
 		// 	return Object.keys(filter)
 		// 		.map((filterKey) => {
@@ -121,5 +122,11 @@ export class TableComponent implements OnDestroy, OnInit {
 				this.paginator!.pageIndex = 0;
 				this.dataSource.filter = v;
 			});
+  }
+
+  add() {
+    this.matDialog.open(FormComponent,{
+      width:'650px'
+    });
   }
 }
