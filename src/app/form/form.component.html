@@ -1,14 +1,16 @@
-<form [formGroup]='formGroup' (ngSubmit)='onSubmit'>
+<form [formGroup]='formGroup' (ngSubmit)='onSubmit()'>
     <div style="display: inline-block;margin-right: 1%; width: 49%">
         <div>
             <mat-form-field>
-                <mat-select formControlName="name" placeholder='Nama Personil' required>
+                <mat-select formControlName="pid" placeholder='Nama Personil' required>
                     <mat-option>
                         <ngx-mat-select-search [formControl]="nameFilterCtrl" placeholderLabel='Cari Personil'>
                         </ngx-mat-select-search>
                     </mat-option>
-                    <mat-option *ngFor='let item of (personil$ | async); trackBy: personilTrackByFn' [value]='item.nama'>{{
-                        item.panggilan }} - {{ item.nama }} </mat-option>
+                    <mat-option *ngFor='let item of (personil$ | async); trackBy: personilTrackByFn'
+                        [value]='item.pid'>
+                        {{ item.panggilan }} - {{ item.nama }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -27,7 +29,7 @@
         <div>
             <mat-form-field>
                 <mat-label>Addition Task</mat-label>
-                <input matInput formControlName="additionTask" name='additionTask' required>
+                <input matInput formControlName="additionTask" name='additionTask'>
             </mat-form-field>
         </div>
         <div>

@@ -13,7 +13,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 import { Subscription } from "rxjs";
 import { takeWhile } from "rxjs/operators";
@@ -43,8 +43,8 @@ export interface Log {
 export class TableComponent implements OnDestroy, OnInit {
 	private _alive = true;
 	private _filterFormSubscription?: Subscription;
-	dataSource = new MatTableDataSource<Log>();
-  displayedColumns = [
+  dataSource = new MatTableDataSource<Log>();
+  viewColumnCtrl = new FormControl([
     'name',
     'project',
     'product',
@@ -57,8 +57,9 @@ export class TableComponent implements OnDestroy, OnInit {
     'status', // Completed | On Track | At Risk | Off Track
     'effort', // Small | Medium | Large | Extra Large
     'blockers',
-  ];
-	filterForm?: FormGroup;
+  ]);
+  displayedColumns = this.viewColumnCtrl.value;
+  filterForm?: FormGroup;
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
 	@ViewChild(MatSort) sort: MatSort | null = null;
 
@@ -101,7 +102,17 @@ export class TableComponent implements OnDestroy, OnInit {
 		// 			);
 		// 		})
 		// 		.every(v => v);
-		// };
+    // };
+    this.afs.collection<Log>('backlog')
+      .valueChanges()
+      .subscribe((data)=>{
+        console.log(108, data);
+        this.dataSource.data = data;
+      });
+    this.viewColumnCtrl.valueChanges
+    .subscribe((value: string[])=>{
+      this.displayedColumns = value;
+    });
   }
 
   buildFilterForm() {
