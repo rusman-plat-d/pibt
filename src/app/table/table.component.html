@@ -3,15 +3,9 @@
         <button (click)='add()' mat-button>
             <mat-icon>add</mat-icon>Tambah
         </button>
-        <!-- <button (click)='filterColumn()' mat-button>
-            <mat-icon>view_column</mat-icon> Kolom
-        </button> -->
-        <!-- <button *ngIf='!search' (click)='search=true' mat-button>
+        <button mat-button>
             <mat-icon>search</mat-icon>Cari
         </button>
-        <button *ngIf='search' (click)='search=false' mat-button>
-            <mat-icon>clear</mat-icon>Tutup
-        </button> -->
         <!-- <button *ngIf='filtered' (click)='filterForm!.reset()' mat-button>
             <mat-icon>delete</mat-icon>Bersihkan Pencarian
         </button> -->
@@ -121,10 +115,10 @@
             <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef> Action </th>
                 <td mat-cell *matCellDef="let row">
-                    <button (click)='edit(row.id)' color='warn' mat-button>
+                    <button (click)='edit(row.id)' mat-icon-button>
                         <mat-icon>edit</mat-icon>
                     </button>
-                    <button (click)='delete(row.id)' color='warn' mat-button>
+                    <button (click)='delete(row.id)' color='warn' mat-icon-button>
                         <mat-icon>delete</mat-icon>
                     </button>
                 </td>

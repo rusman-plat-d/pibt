@@ -35,13 +35,15 @@ import { TableComponent } from './table/table.component';
 
 import { environment } from '../environments/environment';
 import { PersonilPipe } from './pipes/personil.pipe';
+import { FilterComponent } from './filter/filter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TableComponent,
     FormComponent,
-    PersonilPipe
+    PersonilPipe,
+    FilterComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,7 @@ import { PersonilPipe } from './pipes/personil.pipe';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireAnalyticsModule,
-    AngularFirestoreModule.enablePersistence({experimentalForceOwningTab: true,synchronizeTabs:true}),
+    AngularFirestoreModule.enablePersistence({synchronizeTabs:true}),
 
     MatNativeDateModule,
     MatButtonModule,

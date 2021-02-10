@@ -1,17 +1,16 @@
 <mat-toolbar dense>
-    {{ dialogData?.id ? 'Ubah' :'Tambah' }}
+    Filter
 </mat-toolbar>
-<form [formGroup]='formGroup' (ngSubmit)='onSubmit()'>
+<form [formGroup]='filterService.filterForm' (ngSubmit)='onSubmit()'>
     <div style="display: inline-block;margin-right: 1%; width: 49%">
         <div>
             <mat-form-field>
-                <mat-select formControlName="pid" placeholder='Nama Personil' required>
+                <mat-select formControlName="pid" multiple placeholder='Nama Personil'>
                     <mat-option>
                         <ngx-mat-select-search [formControl]="nameFilterCtrl" placeholderLabel='Cari Personil'>
                         </ngx-mat-select-search>
                     </mat-option>
-                    <mat-option *ngFor='let item of (personil$ | async); trackBy: personilTrackByFn'
-                        [value]='item.pid'>
+                    <mat-option *ngFor='let item of (personil$ | async); trackBy: personilTrackByFn' [value]='item.pid'>
                         {{ item.panggilan }} - {{ item.nama }}
                     </mat-option>
                 </mat-select>
@@ -20,7 +19,7 @@
         <div>
             <mat-form-field>
                 <mat-label>Project</mat-label>
-                <input matInput formControlName="project" name='project' required>
+                <input matInput formControlName="project" name='project'>
             </mat-form-field>
         </div>
         <div>
@@ -38,16 +37,18 @@
         <div>
             <mat-form-field>
                 <mat-label>Module</mat-label>
-                <input matInput formControlName="module" name='module' required>
+                <input matInput formControlName="module" name='module'>
             </mat-form-field>
         </div>
         <div>
             <mat-form-field>
                 <mat-label>Date Start</mat-label>
-                <input (focus)='dateStartPicker.open()' matInput [matDatepicker]='dateStartPicker'
-                    formControlName="date_start" name='date_start' readonly>
+                <mat-date-range-input formGroupName='date_start' [rangePicker]="dateStartPicker">
+                    <input formControlName='start' matStartDate placeholder="Start date">
+                    <input formControlName='end' matEndDate placeholder="End date">
+                </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="dateStartPicker"></mat-datepicker-toggle>
-                <mat-datepicker #dateStartPicker (closed)='dateTargetRef.focus()'></mat-datepicker>
+                <mat-date-range-picker #dateStartPicker></mat-date-range-picker>
             </mat-form-field>
         </div>
     </div>
@@ -55,30 +56,34 @@
         <div>
             <mat-form-field>
                 <mat-label>Date Target</mat-label>
-                <input #dateTargetRef (focus)='dateTargetPicker.open()' matInput [matDatepicker]='dateTargetPicker'
-                    formControlName="date_target" name='date_target' readonly>
+                <mat-date-range-input formGroupName='date_target' [rangePicker]="dateTargetPicker">
+                    <input formControlName='start' matStartDate placeholder="Start date">
+                    <input formControlName='end' matEndDate placeholder="End date">
+                </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="dateTargetPicker"></mat-datepicker-toggle>
-                <mat-datepicker #dateTargetPicker (closed)='dateFinishRef.focus()'></mat-datepicker>
+                <mat-date-range-picker #dateTargetPicker></mat-date-range-picker>
             </mat-form-field>
         </div>
         <div>
             <mat-form-field>
                 <mat-label>Date Finish</mat-label>
-                <input #dateFinishRef (focus)='dateFinishPicker.open()' matInput [matDatepicker]='dateFinishPicker'
-                    formControlName="date_finish" name='date_finish' readonly>
+                <mat-date-range-input formGroupName='date_finish' [rangePicker]="dateFinishPicker">
+                    <input formControlName='start' matStartDate placeholder="Start date">
+                    <input formControlName='end' matEndDate placeholder="End date">
+                </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="dateFinishPicker"></mat-datepicker-toggle>
-                <mat-datepicker #dateFinishPicker (closed)='activityRef.focus()'></mat-datepicker>
+                <mat-date-range-picker #dateFinishPicker></mat-date-range-picker>
             </mat-form-field>
         </div>
         <div>
             <mat-form-field>
                 <mat-label>Activity</mat-label>
-                <input #activityRef matInput formControlName="activity" name='activity' required>
+                <input #activityRef matInput formControlName="activity" name='activity'>
             </mat-form-field>
         </div>
         <div>
             <mat-form-field>
-                <mat-select formControlName="status" placeholder='Status' required>
+                <mat-select formControlName="status" placeholder='Status'>
                     <mat-option value='Off Track'>Off Track</mat-option>
                     <mat-option value='On Track'>On Track</mat-option>
                     <mat-option value='At Risk'>At Risk</mat-option>
@@ -88,7 +93,7 @@
         </div>
         <div>
             <mat-form-field>
-                <mat-select formControlName="effort" placeholder='Effort' required>
+                <mat-select formControlName="effort" placeholder='Effort'>
                     <mat-option value='Small'>Small</mat-option>
                     <mat-option value='Medium'>Medium</mat-option>
                     <mat-option value='Large'>Large</mat-option>
@@ -103,12 +108,9 @@
             </mat-form-field>
         </div>
     </div>
-    
+
     <div style="display: flex; flex-direction: row; align-items: center;">
-        <mat-checkbox *ngIf='showCloseCheckbox' [checked]='closeAfterSubmit'
-            (change)='closeAfterSubmit = !closeAfterSubmit'>
-            Tutup Setelah Submit</mat-checkbox>
         <span style='flex: 1 auto'></span>
-        <button color='primary' mat-raised-button type="submit">Submit</button>
+        <button color='primary' mat-raised-button type="submit">Cari</button>
     </div>
 </form>

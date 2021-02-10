@@ -16,24 +16,9 @@ import { MatTableDataSource } from "@angular/material/table";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 import { Subscription } from "rxjs";
-import { takeWhile } from "rxjs/operators";
+import { map, takeWhile } from "rxjs/operators";
 import { FormComponent } from '../form/form.component';
-
-export interface Log {
-  id: string;
-  name: string;
-  project: string;
-  product: string;
-  additionTask: string;
-  module: string;
-  date_start: string | Date;
-  date_target: string | Date;
-  date_finish: string | Date;
-  activity: string;
-  status: string;
-  effort: string;
-  blockers: string;
-}
+import { Backlog } from '../types/backlog';
 
 @Component({
   selector: 'app-table',
@@ -43,7 +28,7 @@ export interface Log {
 export class TableComponent implements OnDestroy, OnInit {
 	private _alive = true;
 	private _filterFormSubscription?: Subscription;
-  dataSource = new MatTableDataSource<Log>();
+  dataSource = new MatTableDataSource<Backlog>();
   formDialog: MatDialogRef<FormComponent> | null = null;
   viewColumnCtrl = new FormControl([
     'name',
@@ -65,8 +50,7 @@ export class TableComponent implements OnDestroy, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
 	@ViewChild(MatSort) sort: MatSort | null = null;
 
-  search = false;
-  trackBy = (row: Log) => {
+  trackBy = (row: Backlog) => {
 		return row.id;
   }
   
@@ -105,8 +89,14 @@ export class TableComponent implements OnDestroy, OnInit {
 		// 		})
 		// 		.every(v => v);
     // };
-    this.afs.collection<Log>('backlog')
-      .valueChanges()
+    this.afs.collection<Backlog>('backlog')
+      .snapshotChanges()
+      .pipe(
+        map((data)=>data.map(a => ({
+            ...a.payload.doc.data(),
+            id: a.payload.doc.id,
+          })))
+      )
       .subscribe((data)=>{
         console.log(108, data);
         this.dataSource.data = data;
@@ -146,26 +136,39 @@ export class TableComponent implements OnDestroy, OnInit {
     });
 
     this.formDialog.componentInstance
-    .submit
-    .pipe(
-      takeWhile(()=>this._alive)
-    )
-    .subscribe((closeAfterSubmit: boolean)=> {
-      this.formDialog?.close();
-      this.formDialog = null;
-      if (!closeAfterSubmit) {
-        this.add();
-      }
-    });
+      .submit
+      .pipe(
+        takeWhile(()=>this._alive)
+      )
+      .subscribe((closeAfterSubmit: boolean)=> {
+        this.formDialog?.close();
+        this.formDialog = null;
+        if (!closeAfterSubmit) {
+          this.add();
+        }
+      });
   }
 
   edit(id: string) {
     this.formDialog = this.matDialog.open(FormComponent,{
       width:'650px',
       data: {
-        showCloseCheckbox: false,
+        id,
       }
     });
+
+    this.formDialog.componentInstance
+      .submit
+      .pipe(
+        takeWhile(()=>this._alive)
+      )
+      .subscribe((closeAfterSubmit: boolean)=> {
+        this.formDialog?.close();
+        this.formDialog = null;
+        if (!closeAfterSubmit) {
+          this.add();
+        }
+      });
   }
 
   delete(id: string) {

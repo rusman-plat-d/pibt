@@ -17,6 +17,7 @@ import firebase from 'firebase';
 import { IPersonil } from '../types/personil';
 import { PERSONIL } from '../data/personil';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Backlog } from '../types/backlog';
 
 @Component({
   selector: 'app-form',
@@ -54,10 +55,8 @@ export class FormComponent implements AfterViewChecked, AfterViewInit, OnDestroy
     private _fb: FormBuilder,
     private _afs: AngularFirestore,
     public dialogRef: MatDialogRef<FormComponent>,
-    @Inject(MAT_DIALOG_DATA) public dialogData: {showCloseCheckbox:boolean}
-  ) {
-    this.showCloseCheckbox = dialogData.showCloseCheckbox;
-  }
+    @Inject(MAT_DIALOG_DATA) public dialogData: {id:string}
+  ) {}
 
   ngAfterViewChecked(){
   }
@@ -75,6 +74,25 @@ export class FormComponent implements AfterViewChecked, AfterViewInit, OnDestroy
   
   ngOnInit(): void {
     this.buildForm();
+    console.log(this.dialogData);
+    if (this.dialogData.id) {
+      this._afs.doc('backlog/'+this.dialogData.id)
+        .get()
+        .pipe(
+          takeWhile(()=>this._alive)
+        )
+        .subscribe(doc=>{
+          const data = doc.data() as Backlog;
+          console.log(82, doc.data());
+          this.formGroup.setValue({
+            ...(data),
+            date_start:  (data?.date_start && (data?.date_start as any)?.toDate()) ?? '',
+            date_target: (data?.date_start && (data?.date_target as any)?.toDate()) ?? '',
+            date_finish: (data?.date_start && (data?.date_finish as any)?.toDate()) ?? '',
+            id: doc.id,
+          });
+        });
+    }
   }
 
   buildForm() {
@@ -99,7 +117,7 @@ export class FormComponent implements AfterViewChecked, AfterViewInit, OnDestroy
 
   onSubmit(){
     if (this.formGroup.valid) {
-      const doc = this.formGroup.value;
+      const doc = this.formGroup.value as Backlog;
       if (!doc.createdAt) {
         doc.createdAt = firebase.firestore.FieldValue.serverTimestamp();
       }
