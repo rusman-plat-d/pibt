@@ -1,0 +1,8 @@
+form div div,
+form div mat-form-field {
+  width: 100%;
+}
+
+::ng-deep .ngx-mat-select-search-toggle-all-tooltip {
+  font-size: 0.8em;
+}

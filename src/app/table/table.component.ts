@@ -19,6 +19,7 @@ import { Subscription } from "rxjs";
 import { map, takeWhile } from "rxjs/operators";
 import { FormComponent } from '../form/form.component';
 import { Backlog } from '../types/backlog';
+import { FilterComponent } from '../filter/filter.component';
 
 @Component({
   selector: 'app-table',
@@ -30,6 +31,7 @@ export class TableComponent implements OnDestroy, OnInit {
 	private _filterFormSubscription?: Subscription;
   dataSource = new MatTableDataSource<Backlog>();
   formDialog: MatDialogRef<FormComponent> | null = null;
+  filterDialog: MatDialogRef<FilterComponent> | null = null;
   viewColumnCtrl = new FormControl([
     'name',
     'project',
@@ -173,5 +175,9 @@ export class TableComponent implements OnDestroy, OnInit {
 
   delete(id: string) {
 
+  }
+
+  openFilterForm() {
+    this.filterDialog = this.matDialog.open(FilterComponent);
   }
 }

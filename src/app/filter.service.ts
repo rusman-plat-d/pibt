@@ -10,6 +10,7 @@ export class FilterService {
     private fb: FormBuilder
   ) {
     this.filterForm = fb.group({
+      id: '',
       pid: [[]],
       project: ['', ],
       product: ['',],
@@ -28,8 +29,8 @@ export class FilterService {
         end: [],
       }),
       activity: ['', ],
-      status: ['', ],
-      effort: ['', ],
+      status: [[], ],
+      effort: [[], ],
       blockers: ['', ],
       createdAt: ['', ],
       updatedAt: ['', ],
