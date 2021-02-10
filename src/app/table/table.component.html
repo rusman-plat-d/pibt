@@ -6,15 +6,15 @@
         <!-- <button (click)='filterColumn()' mat-button>
             <mat-icon>view_column</mat-icon> Kolom
         </button> -->
-        <button *ngIf='!search' (click)='search=true' mat-button>
+        <!-- <button *ngIf='!search' (click)='search=true' mat-button>
             <mat-icon>search</mat-icon>Cari
         </button>
         <button *ngIf='search' (click)='search=false' mat-button>
             <mat-icon>clear</mat-icon>Tutup
-        </button>
-        <button *ngIf='filtered' (click)='filterForm!.reset()' mat-button>
+        </button> -->
+        <!-- <button *ngIf='filtered' (click)='filterForm!.reset()' mat-button>
             <mat-icon>delete</mat-icon>Bersihkan Pencarian
-        </button>
+        </button> -->
         <!-- <button>
             <mat-icon>view_column</mat-icon>
             Columns
@@ -23,8 +23,10 @@
             <mat-menu></mat-menu>
         </mat-menu> -->
         <span style="flex: 1 auto"></span>
-        <mat-select [formControl]='viewColumnCtrl' multiple placeholder='Column' style="width: 200px;">
-            <mat-option value='name'>Name</mat-option>
+        <mat-label style="margin-right: 2em;">
+            Lihat Kolom: 
+        </mat-label>
+        <mat-select [formControl]='viewColumnCtrl' multiple placeholder='Kolom' style="width: 200px;">
             <mat-option value='project'>Project</mat-option>
             <mat-option value='product'>Product</mat-option>
             <mat-option value='additionTask'>Addition Task</mat-option>
@@ -113,6 +115,19 @@
             <ng-container matColumnDef="blockers">
                 <th mat-header-cell *matHeaderCellDef> Blockers </th>
                 <td mat-cell *matCellDef="let row"> {{row.blockers}} </td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let row">
+                    <button (click)='edit(row.id)' color='warn' mat-button>
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button (click)='delete(row.id)' color='warn' mat-button>
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
             </ng-container>
         </table>
     </form>

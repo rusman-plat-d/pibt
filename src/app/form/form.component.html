@@ -41,9 +41,9 @@
         <div>
             <mat-form-field>
                 <mat-label>Date Start</mat-label>
-                <input matInput [matDatepicker]='dateStartPicker' formControlName="date_start" name='date_start' readonly>
+                <input (focus)='dateStartPicker.open()' matInput [matDatepicker]='dateStartPicker' formControlName="date_start" name='date_start' readonly>
                 <mat-datepicker-toggle matSuffix [for]="dateStartPicker"></mat-datepicker-toggle>
-                <mat-datepicker #dateStartPicker></mat-datepicker>
+                <mat-datepicker #dateStartPicker (closed)='dateTargetRef.focus()'></mat-datepicker>
             </mat-form-field>
         </div>
     </div>
@@ -51,23 +51,23 @@
         <div>
             <mat-form-field>
                 <mat-label>Date Target</mat-label>
-                <input matInput [matDatepicker]='dateTargetPicker' formControlName="date_target" name='date_target' readonly>
+                <input #dateTargetRef (focus)='dateTargetPicker.open()' matInput [matDatepicker]='dateTargetPicker' formControlName="date_target" name='date_target' readonly>
                 <mat-datepicker-toggle matSuffix [for]="dateTargetPicker"></mat-datepicker-toggle>
-                <mat-datepicker #dateTargetPicker></mat-datepicker>
+                <mat-datepicker #dateTargetPicker (closed)='dateFinishRef.focus()'></mat-datepicker>
             </mat-form-field>
         </div>
         <div>
             <mat-form-field>
                 <mat-label>Date Finish</mat-label>
-                <input matInput [matDatepicker]='dateFinishPicker' formControlName="date_finish" name='date_finish' readonly>
+                <input #dateFinishRef (focus)='dateFinishPicker.open()' matInput [matDatepicker]='dateFinishPicker' formControlName="date_finish" name='date_finish' readonly>
                 <mat-datepicker-toggle matSuffix [for]="dateFinishPicker"></mat-datepicker-toggle>
-                <mat-datepicker #dateFinishPicker></mat-datepicker>
+                <mat-datepicker #dateFinishPicker (closed)='activityRef.focus()'></mat-datepicker>
             </mat-form-field>
         </div>
         <div>
             <mat-form-field>
                 <mat-label>Activity</mat-label>
-                <input matInput formControlName="activity" name='activity' required>
+                <input #activityRef matInput formControlName="activity" name='activity' required>
             </mat-form-field>
         </div>
         <div>
@@ -98,7 +98,11 @@
         </div>
     </div>
     
-    <div>
+    <div style="display: flex; flex-direction: row; align-items: center;">
+        <mat-checkbox *ngIf='showCloseCheckbox' [checked]='closeAfterSubmit'
+            (change)='closeAfterSubmit = !closeAfterSubmit'>
+            Tutup Setelah Submit</mat-checkbox>
+        <span style='flex: 1 auto'></span>
         <button color='primary' mat-raised-button type="submit">Submit</button>
     </div>
 </form>

@@ -44,6 +44,7 @@ export class TableComponent implements OnDestroy, OnInit {
 	private _alive = true;
 	private _filterFormSubscription?: Subscription;
   dataSource = new MatTableDataSource<Log>();
+  formDialog: MatDialogRef<FormComponent> | null = null;
   viewColumnCtrl = new FormControl([
     'name',
     'project',
@@ -57,6 +58,7 @@ export class TableComponent implements OnDestroy, OnInit {
     'status', // Completed | On Track | At Risk | Off Track
     'effort', // Small | Medium | Large | Extra Large
     'blockers',
+    'action',
   ]);
   displayedColumns = this.viewColumnCtrl.value;
   filterForm?: FormGroup;
@@ -111,7 +113,7 @@ export class TableComponent implements OnDestroy, OnInit {
       });
     this.viewColumnCtrl.valueChanges
     .subscribe((value: string[])=>{
-      this.displayedColumns = value;
+      this.displayedColumns = ['name',...value, 'action'];
     });
   }
 
@@ -136,8 +138,37 @@ export class TableComponent implements OnDestroy, OnInit {
   }
 
   add() {
-    this.matDialog.open(FormComponent,{
-      width:'650px'
+    this.formDialog = this.matDialog.open(FormComponent,{
+      width:'650px',
+      data: {
+        showCloseCheckbox: false,
+      }
     });
+
+    this.formDialog.componentInstance
+    .submit
+    .pipe(
+      takeWhile(()=>this._alive)
+    )
+    .subscribe((closeAfterSubmit: boolean)=> {
+      this.formDialog?.close();
+      this.formDialog = null;
+      if (!closeAfterSubmit) {
+        this.add();
+      }
+    });
+  }
+
+  edit(id: string) {
+    this.formDialog = this.matDialog.open(FormComponent,{
+      width:'650px',
+      data: {
+        showCloseCheckbox: false,
+      }
+    });
+  }
+
+  delete(id: string) {
+
   }
 }
