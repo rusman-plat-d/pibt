@@ -98,22 +98,23 @@ export class TableComponent implements OnDestroy, OnInit {
       .filterForm
       .valueChanges
       .pipe(
-        mergeMap(formValue => {
+        mergeMap(filterValue => {
           return this.afs.collection<Backlog>('backlog')
                   .valueChanges()
                   .pipe(
                     map(backlogCollection => {
+                      console.clear();
                       return backlogCollection
                         // filter personil by pid
                         .filter(backlog => {
-                          const selectedPersonilPid = formValue.pid.length > 0
-                              ? formValue.pid
+                          const selectedPersonilPid = filterValue.pid.length > 0
+                              ? filterValue.pid
                               : PERSONIL_PID;
                           return selectedPersonilPid.includes(backlog.pid);
                         })
                         // filter project
                         .filter(backlog => {
-                          const q = formValue.project ?? '';
+                          const q = filterValue.project ?? '';
                           if (q == '') {
                             return true;
                           }
@@ -124,7 +125,7 @@ export class TableComponent implements OnDestroy, OnInit {
                         })
                         // filter product
                         .filter(backlog => {
-                          const q = formValue.product ?? '';
+                          const q = filterValue.product ?? '';
                           if (q == '') {
                             return true;
                           }
@@ -135,7 +136,7 @@ export class TableComponent implements OnDestroy, OnInit {
                         })
                         // filter additionTask
                         .filter(backlog => {
-                          const q = formValue.additionTask ?? '';
+                          const q = filterValue.additionTask ?? '';
                           if (q == '') {
                             return true;
                           }
@@ -146,7 +147,7 @@ export class TableComponent implements OnDestroy, OnInit {
                         })
                         // filter module
                         .filter(backlog => {
-                          const q = formValue.module ?? '';
+                          const q = filterValue.module ?? '';
                           if (q == '') {
                             return true;
                           }
@@ -156,13 +157,26 @@ export class TableComponent implements OnDestroy, OnInit {
                             ) > -1;
                         })
                         // filter date_start
+                        .filter(backlog => {
+                          const filter_dateStart = filterValue.date_start;
+                          const backlog_dateStart = (backlog.date_start as firebase.default.firestore.Timestamp).toDate();
+                          const start = backlog_dateStart >= filter_dateStart.start;
+                          const end = backlog_dateStart <= filter_dateStart.end;
+                          console.log(165, {
+                            ...filter_dateStart,
+                            backlog_dateStart,
+                            _start: start,
+                            _end: end,
+                          });
+                          return start && end;
+                        })
                         // filter date_target
                         // filter date_finish
                         // filter status
                         // filter effort
                         // filter activity
                         .filter(backlog => {
-                          const q = formValue.activity ?? '';
+                          const q = filterValue.activity ?? '';
                           if (q == '') {
                             return true;
                           }
@@ -173,7 +187,7 @@ export class TableComponent implements OnDestroy, OnInit {
                         })
                         // filter blockers
                         .filter(backlog => {
-                          const q = formValue.blockers ?? '';
+                          const q = filterValue.blockers ?? '';
                           if (q == '') {
                             return true;
                           }
@@ -269,4 +283,5 @@ export class TableComponent implements OnDestroy, OnInit {
   openFilterForm() {
     this.filterDialog = this.matDialog.open(FilterComponent);
   }
+
 }

@@ -7,13 +7,13 @@ export interface Backlog {
     product: string;
     additionTask: string;
     module: string;
-    date_start: string | Date;
-    date_target: string | Date;
-    date_finish: string | Date;
+    date_start: string | Date | firebase.firestore.FieldValue | firebase.firestore.Timestamp;
+    date_target: string | Date | firebase.firestore.FieldValue | firebase.firestore.Timestamp;
+    date_finish: string | Date | firebase.firestore.FieldValue | firebase.firestore.Timestamp;
     activity: string;
     status: string;
     effort: string;
     blockers: string;
-    createdAt: string | Date | firebase.firestore.FieldValue;
-    updatedAt: string | Date | firebase.firestore.FieldValue;
+    createdAt: string | Date | firebase.firestore.FieldValue | firebase.firestore.Timestamp;
+    updatedAt: string | Date | firebase.firestore.FieldValue | firebase.firestore.Timestamp;
 }

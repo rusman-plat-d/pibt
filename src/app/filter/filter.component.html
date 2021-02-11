@@ -1,4 +1,4 @@
-<mat-toolbar dense>
+<mat-toolbar style='margin-bottom: 1em;'>
     Filter
 </mat-toolbar>
 <form [formGroup]='filterService.filterForm' (ngSubmit)='onSubmit()'>
@@ -52,7 +52,7 @@
                         matEndDate placeholder="End date" readonly>
                 </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="dateStartPicker"></mat-datepicker-toggle>
-                <mat-date-range-picker #dateStartPicker (closed)='dateTargetEnd.focus()'></mat-date-range-picker>
+                <mat-date-range-picker #dateStartPicker></mat-date-range-picker>
             </mat-form-field>
         </div>
     </div>
@@ -67,7 +67,7 @@
                         formControlName='end' matEndDate placeholder="End date" readonly>
                 </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="dateTargetPicker"></mat-datepicker-toggle>
-                <mat-date-range-picker #dateTargetPicker (closed)='dateFinishEnd.focus()'></mat-date-range-picker>
+                <mat-date-range-picker #dateTargetPicker></mat-date-range-picker>
             </mat-form-field>
         </div>
         <div>
@@ -117,6 +117,6 @@
 
     <div style="display: flex; flex-direction: row; align-items: center;">
         <span style='flex: 1 auto'></span>
-        <button color='primary' mat-raised-button type="button">Tutup</button>
+        <button (click)='dialogRef.close()' color='primary' mat-raised-button type="button">Tutup</button>
     </div>
 </form>

@@ -45,9 +45,9 @@
             <mat-form-field>
                 <mat-label>Date Start</mat-label>
                 <input (focus)='dateStartPicker.open()' matInput [matDatepicker]='dateStartPicker'
-                    formControlName="date_start" name='date_start' readonly>
+                    formControlName="date_start" name='date_start' readonly required>
                 <mat-datepicker-toggle matSuffix [for]="dateStartPicker"></mat-datepicker-toggle>
-                <mat-datepicker #dateStartPicker (closed)='dateTargetRef.focus()'></mat-datepicker>
+                <mat-datepicker #dateStartPicker></mat-datepicker>
             </mat-form-field>
         </div>
     </div>
@@ -56,16 +56,16 @@
             <mat-form-field>
                 <mat-label>Date Target</mat-label>
                 <input #dateTargetRef (focus)='dateTargetPicker.open()' matInput [matDatepicker]='dateTargetPicker'
-                    formControlName="date_target" name='date_target' readonly>
+                    formControlName="date_target" name='date_target' readonly required>
                 <mat-datepicker-toggle matSuffix [for]="dateTargetPicker"></mat-datepicker-toggle>
-                <mat-datepicker #dateTargetPicker (closed)='dateFinishRef.focus()'></mat-datepicker>
+                <mat-datepicker #dateTargetPicker></mat-datepicker>
             </mat-form-field>
         </div>
         <div>
             <mat-form-field>
                 <mat-label>Date Finish</mat-label>
                 <input #dateFinishRef (focus)='dateFinishPicker.open()' matInput [matDatepicker]='dateFinishPicker'
-                    formControlName="date_finish" name='date_finish' readonly>
+                    formControlName="date_finish" name='date_finish' readonly required>
                 <mat-datepicker-toggle matSuffix [for]="dateFinishPicker"></mat-datepicker-toggle>
                 <mat-datepicker #dateFinishPicker (closed)='activityRef.focus()'></mat-datepicker>
             </mat-form-field>
