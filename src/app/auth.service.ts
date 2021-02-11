@@ -7,13 +7,18 @@ import firebase from 'firebase/app';
   providedIn: 'root'
 })
 export class AuthService {
+  loggedIn = false;
   constructor(
     public auth: AngularFireAuth
   ) { }
   login() {
-    return this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    return this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(_ => this.loggedIn = true);
   }
-  logout() {
-    return this.auth.signOut();
+  logout(): void {
+    if (confirm('Logout dari aplikasi ini?')) {
+      this.auth.signOut()
+        .then(_ => this.loggedIn = false);
+    }
   }
 }

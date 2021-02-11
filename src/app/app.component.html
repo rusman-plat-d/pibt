@@ -11,6 +11,6 @@
   </ng-template>
 </mat-toolbar>
 
-<div>
+<div *ngIf='authService.loggedIn'>
   <app-table style='width: 100%'></app-table>
 </div>
