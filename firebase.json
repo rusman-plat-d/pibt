@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "target": "pibt",
+      "target": "pragmainf-backlog-task",
       "public": "dist/pibt",
       "ignore": [
         "**/.*"

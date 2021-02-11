@@ -126,7 +126,21 @@
         },
         "deploy": {
           "builder": "@angular/fire:deploy",
-          "options": {}
+          "options": {
+			  	"buildTarget": "pibt:build",
+				"firebaseProject": "pragmainf-backlog-task",
+				"functionsNodeVersion": 12,
+				"functionsRuntimeOptions": {
+					"memory": "2GB",
+					"timeoutSeconds": 30
+				}
+			},
+			"configurations": {
+				"production": {
+					"buildTarget": "pibt:build:production",
+					"firebaseProject": "pragmainf-backlog-task"
+				}
+			}
         }
       }
     }

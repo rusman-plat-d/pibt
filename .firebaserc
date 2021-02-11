@@ -2,7 +2,7 @@
   "targets": {
     "pragmainf-backlog-task": {
       "hosting": {
-        "pibt": [
+        "pragmainf-backlog-task": [
           "pragmainf-backlog-task"
         ]
       }
