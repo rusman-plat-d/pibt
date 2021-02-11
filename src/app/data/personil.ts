@@ -25,3 +25,5 @@ export const PERSONIL_BY_PID: IPersonilByPid = {
 };
 
 export const PERSONIL: IPersonil[] = Object.values(PERSONIL_BY_PID);
+
+export const PERSONIL_PID: number[] = PERSONIL.map(p=>p.pid);

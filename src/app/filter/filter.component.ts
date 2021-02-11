@@ -14,7 +14,7 @@ import { IPersonil } from '../types/personil';
 })
 export class FilterComponent implements AfterViewInit, OnDestroy, OnInit {
   private _alive = true;
-  nameFilterCtrl = new FormControl([19]);
+  nameFilterCtrl = new FormControl(' ');
   personil: IPersonil[] = PERSONIL;
   personilTrackByFn = (index: number, personil: IPersonil) => {
     return personil.pid;
@@ -24,6 +24,7 @@ export class FilterComponent implements AfterViewInit, OnDestroy, OnInit {
         takeWhile(()=>this._alive),
         debounceTime(333),
         map((q: string)=>{
+          console.log(27,q);
           q = q.toLowerCase();
           if (q == '') {
             return this.personil;
@@ -35,9 +36,20 @@ export class FilterComponent implements AfterViewInit, OnDestroy, OnInit {
           return retVal;
         })
       );
+  
+  get selectedPersonil(){
+    return PERSONIL
+      .filter(p => {
+        return this.filterService
+        .filterForm
+        .get('pid')
+        ?.value
+        .includes(p.pid);
+      })
+      .map(p => p.panggilan); 
+  }
 
   public tooltipMessage = 'Select All / Unselect All';
-  @ViewChild('personalSelect', { static: true }) personalSelect: MatSelect | null = null;
 
   constructor(
     public filterService: FilterService,
@@ -46,7 +58,15 @@ export class FilterComponent implements AfterViewInit, OnDestroy, OnInit {
 
   ngAfterViewInit(){
     setTimeout(() => {
-      this.nameFilterCtrl.setValue([]);
+      this.nameFilterCtrl.setValue('');
+      this.filterService
+        .filterForm
+        .get('pid')
+        ?.valueChanges
+        .pipe(
+          takeWhile(() => this._alive)
+        )
+        .subscribe(_ => this.nameFilterCtrl.setValue(''));
     }, 1);
   }
 
@@ -58,20 +78,21 @@ export class FilterComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   onSubmit() {
-    this.dialogRef.close();
+    console.log(this.filterService.filterForm.value);
+    // this.dialogRef.close();
   }
 
-  toggleSelectAll(selectAllValue: boolean) {
-    this.filteredBanksMulti
-    .pipe(
-      take(1),
-      takeUntil(this._onDestroy))
-      .subscribe(val => {
-        if (selectAllValue) {
-          this.bankMultiCtrl.patchValue(val);
-        } else {
-          this.bankMultiCtrl.patchValue([]);
-        }
-      });
-  }
+  // toggleSelectAll(selectAllValue: boolean) {
+  //   this.filteredBanksMulti
+  //   .pipe(
+  //     take(1),
+  //     takeUntil(this._onDestroy))
+  //     .subscribe(val => {
+  //       if (selectAllValue) {
+  //         this.bankMultiCtrl.patchValue(val);
+  //       } else {
+  //         this.bankMultiCtrl.patchValue([]);
+  //       }
+  //     });
+  // }
 }

@@ -6,8 +6,10 @@
         <div>
             <mat-form-field>
                 <mat-select #personilSelect formControlName="pid" multiple placeholder='Nama Personil'>
+                    <mat-select-trigger>{{ selectedPersonil }}</mat-select-trigger>
                     <mat-option>
-                        <ngx-mat-select-search [formControl]="nameFilterCtrl" placeholderLabel='Cari Personil'>
+                        <ngx-mat-select-search [formControl]="nameFilterCtrl"
+                            noEntriesFoundLabel='Data tidak ditemukan' placeholderLabel='Cari Personil'>
                         </ngx-mat-select-search>
                     </mat-option>
                     <mat-option *ngFor='let item of (personil$ | async); trackBy: personilTrackByFn' [value]='item.pid'>
@@ -44,11 +46,13 @@
             <mat-form-field>
                 <mat-label>Date Start</mat-label>
                 <mat-date-range-input formGroupName='date_start' [rangePicker]="dateStartPicker">
-                    <input formControlName='start' matStartDate placeholder="Start date">
-                    <input formControlName='end' matEndDate placeholder="End date">
+                    <input (focus)='dateStartPicker.open()' formControlName='start'
+                        matStartDate placeholder="Start date" readonly>
+                    <input (focus)='dateStartPicker.open()' formControlName='end'
+                        matEndDate placeholder="End date" readonly>
                 </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="dateStartPicker"></mat-datepicker-toggle>
-                <mat-date-range-picker #dateStartPicker></mat-date-range-picker>
+                <mat-date-range-picker #dateStartPicker (closed)='dateTargetEnd.focus()'></mat-date-range-picker>
             </mat-form-field>
         </div>
     </div>
@@ -57,22 +61,24 @@
             <mat-form-field>
                 <mat-label>Date Target</mat-label>
                 <mat-date-range-input formGroupName='date_target' [rangePicker]="dateTargetPicker">
-                    <input formControlName='start' matStartDate placeholder="Start date">
-                    <input formControlName='end' matEndDate placeholder="End date">
+                    <input (focus)='dateTargetPicker.open()' formControlName='start'
+                        matStartDate placeholder="Start date" readonly>
+                    <input #dateTargetEnd (focus)='dateTargetPicker.open()'
+                        formControlName='end' matEndDate placeholder="End date" readonly>
                 </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="dateTargetPicker"></mat-datepicker-toggle>
-                <mat-date-range-picker #dateTargetPicker></mat-date-range-picker>
+                <mat-date-range-picker #dateTargetPicker (closed)='dateFinishEnd.focus()'></mat-date-range-picker>
             </mat-form-field>
         </div>
         <div>
             <mat-form-field>
                 <mat-label>Date Finish</mat-label>
                 <mat-date-range-input formGroupName='date_finish' [rangePicker]="dateFinishPicker">
-                    <input formControlName='start' matStartDate placeholder="Start date">
-                    <input formControlName='end' matEndDate placeholder="End date">
+                    <input (focus)='dateFinishPicker.open()' formControlName='start' matStartDate placeholder="Start date">
+                    <input #dateFinishEnd (focus)='dateFinishPicker.open()' formControlName='end' matEndDate placeholder="End date">
                 </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="dateFinishPicker"></mat-datepicker-toggle>
-                <mat-date-range-picker #dateFinishPicker></mat-date-range-picker>
+                <mat-date-range-picker #dateFinishPicker (closed)='activityRef.focus()'></mat-date-range-picker>
             </mat-form-field>
         </div>
         <div>
@@ -112,5 +118,7 @@
     <div style="display: flex; flex-direction: row; align-items: center;">
         <span style='flex: 1 auto'></span>
         <button color='primary' mat-raised-button type="submit">Cari</button>
+        <span style='flex: .1 .1'></span>
+        <button color='warn' mat-raised-button type="button">Reset</button>
     </div>
 </form>

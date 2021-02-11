@@ -15,11 +15,13 @@ import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
-import { Subscription } from "rxjs";
-import { map, takeWhile } from "rxjs/operators";
+import { Observable, Subscription } from "rxjs";
+import { map, mergeMap, switchMap, takeWhile } from "rxjs/operators";
 import { FormComponent } from '../form/form.component';
 import { Backlog } from '../types/backlog';
 import { FilterComponent } from '../filter/filter.component';
+import { FilterService } from '../filter.service';
+import { PERSONIL_PID } from '../data/personil';
 
 @Component({
   selector: 'app-table',
@@ -66,6 +68,7 @@ export class TableComponent implements OnDestroy, OnInit {
     public afs: AngularFirestore,
     private fb: FormBuilder,
     private matDialog: MatDialog,
+    private filterService: FilterService
   ) { }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -92,12 +95,22 @@ export class TableComponent implements OnDestroy, OnInit {
 		// 		.every(v => v);
     // };
     this.afs.collection<Backlog>('backlog')
-      .snapshotChanges()
+      .valueChanges()
       .pipe(
-        map((data)=>data.map(a => ({
-            ...a.payload.doc.data(),
-            id: a.payload.doc.id,
-          })))
+        // // map(backlogCollection => {
+        // //   return backlogCollection.filter(backlog => {
+        // //     console.log(102, PERSONIL_PID);
+        // //     const selectedPersonilPid = this.filterService
+        // //         .filterForm
+        // //         .get('pid')
+        // //         ?.value.length > 0 ? this.filterService
+        // //         .filterForm
+        // //         .get('pid')
+        // //         ?.value
+        // //         : PERSONIL_PID;
+        // //     return selectedPersonilPid.includes(backlog.pid);
+        // //   })
+        // })
       )
       .subscribe((data)=>{
         console.log(108, data);

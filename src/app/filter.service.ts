@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PERSONIL_PID } from './data/personil';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class FilterService {
   ) {
     this.filterForm = fb.group({
       id: '',
-      pid: [[]],
+      pid: [PERSONIL_PID],
       project: ['', ],
       product: ['',],
       additionTask: ['', ],

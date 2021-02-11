@@ -12,7 +12,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, map, switchMap, takeWhile } from 'rxjs/operators';
 
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 import { IPersonil } from '../types/personil';
 import { PERSONIL } from '../data/personil';
@@ -124,7 +124,9 @@ export class FormComponent implements AfterViewChecked, AfterViewInit, OnDestroy
       doc.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
       // add
       if (doc.id == '') {
-        this._afs.collection('backlog').add(doc);
+        const id = this._afs.createId();
+        doc.id = id;
+        this._afs.doc('backlog/'+id).set(doc);
         this.buildForm();
         this.submit.next(this.closeAfterSubmit);
       } else{ // edit to update
