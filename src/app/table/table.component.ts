@@ -16,7 +16,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 import { Observable, Subscription } from "rxjs";
-import { map, mergeMap, switchMap, takeWhile } from "rxjs/operators";
+import { filter, map, mergeMap, switchMap, takeWhile } from "rxjs/operators";
 import { FormComponent } from '../form/form.component';
 import { Backlog } from '../types/backlog';
 import { FilterComponent } from '../filter/filter.component';
@@ -94,32 +94,108 @@ export class TableComponent implements OnDestroy, OnInit {
 		// 		})
 		// 		.every(v => v);
     // };
-    this.afs.collection<Backlog>('backlog')
-      .valueChanges()
+    this.filterService
+      .filterForm
+      .valueChanges
       .pipe(
-        // // map(backlogCollection => {
-        // //   return backlogCollection.filter(backlog => {
-        // //     console.log(102, PERSONIL_PID);
-        // //     const selectedPersonilPid = this.filterService
-        // //         .filterForm
-        // //         .get('pid')
-        // //         ?.value.length > 0 ? this.filterService
-        // //         .filterForm
-        // //         .get('pid')
-        // //         ?.value
-        // //         : PERSONIL_PID;
-        // //     return selectedPersonilPid.includes(backlog.pid);
-        // //   })
-        // })
+        mergeMap(formValue => {
+          return this.afs.collection<Backlog>('backlog')
+                  .valueChanges()
+                  .pipe(
+                    map(backlogCollection => {
+                      return backlogCollection
+                        // filter personil by pid
+                        .filter(backlog => {
+                          const selectedPersonilPid = formValue.pid.length > 0
+                              ? formValue.pid
+                              : PERSONIL_PID;
+                          return selectedPersonilPid.includes(backlog.pid);
+                        })
+                        // filter project
+                        .filter(backlog => {
+                          const q = formValue.project ?? '';
+                          if (q == '') {
+                            return true;
+                          }
+                          return backlog.project
+                            .toLowerCase().indexOf(
+                              q.toLowerCase()
+                            ) > -1;
+                        })
+                        // filter product
+                        .filter(backlog => {
+                          const q = formValue.product ?? '';
+                          if (q == '') {
+                            return true;
+                          }
+                          return backlog.product
+                            .toLowerCase().indexOf(
+                              q.toLowerCase()
+                            ) > -1;
+                        })
+                        // filter additionTask
+                        .filter(backlog => {
+                          const q = formValue.additionTask ?? '';
+                          if (q == '') {
+                            return true;
+                          }
+                          return backlog.additionTask
+                            .toLowerCase().indexOf(
+                              q.toLowerCase()
+                            ) > -1;
+                        })
+                        // filter module
+                        .filter(backlog => {
+                          const q = formValue.module ?? '';
+                          if (q == '') {
+                            return true;
+                          }
+                          return backlog.module
+                            .toLowerCase().indexOf(
+                              q.toLowerCase()
+                            ) > -1;
+                        })
+                        // filter date_start
+                        // filter date_target
+                        // filter date_finish
+                        // filter status
+                        // filter effort
+                        // filter activity
+                        .filter(backlog => {
+                          const q = formValue.activity ?? '';
+                          if (q == '') {
+                            return true;
+                          }
+                          return backlog.activity
+                            .toLowerCase().indexOf(
+                              q.toLowerCase()
+                            ) > -1;
+                        })
+                        // filter blockers
+                        .filter(backlog => {
+                          const q = formValue.blockers ?? '';
+                          if (q == '') {
+                            return true;
+                          }
+                          return backlog.blockers
+                            .toLowerCase().indexOf(
+                              q.toLowerCase()
+                            ) > -1;
+                        });
+                    })
+                  )
+        })
       )
       .subscribe((data)=>{
-        console.log(108, data);
         this.dataSource.data = data;
       });
     this.viewColumnCtrl.valueChanges
-    .subscribe((value: string[])=>{
-      this.displayedColumns = ['name',...value, 'action'];
-    });
+      .subscribe((value: string[])=>{
+        this.displayedColumns = ['name',...value, 'action'];
+      });
+
+    this.filterService.filterForm
+      .get('status')?.setValue(['Off Track','On Track','At Risk','Completed']);
   }
 
   buildFilterForm() {

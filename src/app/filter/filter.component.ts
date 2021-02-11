@@ -24,7 +24,6 @@ export class FilterComponent implements AfterViewInit, OnDestroy, OnInit {
         takeWhile(()=>this._alive),
         debounceTime(333),
         map((q: string)=>{
-          console.log(27,q);
           q = q.toLowerCase();
           if (q == '') {
             return this.personil;
@@ -78,8 +77,8 @@ export class FilterComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   onSubmit() {
-    console.log(this.filterService.filterForm.value);
-    // this.dialogRef.close();
+    // console.log(this.filterService.filterForm.value);
+    this.dialogRef.close();
   }
 
   // toggleSelectAll(selectAllValue: boolean) {
