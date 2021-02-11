@@ -122,16 +122,18 @@ export class FormComponent implements AfterViewChecked, AfterViewInit, OnDestroy
         doc.createdAt = firebase.firestore.FieldValue.serverTimestamp();
       }
       doc.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-      // add
-      if (doc.id == '') {
-        const id = this._afs.createId();
-        doc.id = id;
-        this._afs.doc('backlog/'+id).set(doc);
-        this.buildForm();
-        this.submit.next(this.closeAfterSubmit);
-      } else{ // edit to update
-        this._afs.doc('backlog/'+doc.id).update(doc);
-        this.submit.next(true);
+      if (confirm('Simpan data ini?')) {
+        // add
+        if (doc.id == '') {
+          const id = this._afs.createId();
+          doc.id = id;
+          this._afs.doc('backlog/'+id).set(doc);
+          this.buildForm();
+          this.submit.next(this.closeAfterSubmit);
+        } else{ // edit to update
+          this._afs.doc('backlog/'+doc.id).update(doc);
+          this.submit.next(true);
+        }
       }
     }
   }

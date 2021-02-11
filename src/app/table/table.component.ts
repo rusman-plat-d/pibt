@@ -98,7 +98,7 @@ export class TableComponent implements OnDestroy, OnInit {
       .filterForm
       .valueChanges
       .pipe(
-        mergeMap(filterValue => {
+        mergeMap((filterValue: Backlog) => {
           return this.afs.collection<Backlog>('backlog')
                   .valueChanges()
                   .pipe(
@@ -110,7 +110,7 @@ export class TableComponent implements OnDestroy, OnInit {
                           const selectedPersonilPid = filterValue.pid.length > 0
                               ? filterValue.pid
                               : PERSONIL_PID;
-                          return selectedPersonilPid.includes(backlog.pid);
+                          return selectedPersonilPid.includes(backlog.pid as never);
                         })
                         // filter project
                         .filter(backlog => {
@@ -160,20 +160,42 @@ export class TableComponent implements OnDestroy, OnInit {
                         .filter(backlog => {
                           const filter_dateStart = filterValue.date_start;
                           const backlog_dateStart = (backlog.date_start as firebase.default.firestore.Timestamp).toDate();
-                          const start = backlog_dateStart >= filter_dateStart.start;
-                          const end = backlog_dateStart <= filter_dateStart.end;
-                          console.log(165, {
-                            ...filter_dateStart,
-                            backlog_dateStart,
-                            _start: start,
-                            _end: end,
-                          });
+                          const start = backlog_dateStart >= (filter_dateStart as any).start;
+                          const end = backlog_dateStart <= (filter_dateStart as any).end;
                           return start && end;
                         })
                         // filter date_target
+                        .filter(backlog => {
+                          const filter_dateTarget = filterValue.date_target;
+                          const backlog_dateTarget = (backlog.date_target as firebase.default.firestore.Timestamp).toDate();
+                          const start = backlog_dateTarget >= (filter_dateTarget as any).start;
+                          const end = backlog_dateTarget <= (filter_dateTarget as any).end;
+                          // console.log(165, {
+                          //   ...(filter_dateTarget as any),
+                          //   backlog_dateTarget,
+                          //   _start: start,
+                          //   _end: end,
+                          // });
+                          return start && end;
+                        })
                         // filter date_finish
+                        .filter(backlog => {
+                          const filter_dateFinish = filterValue.date_target;
+                          const backlog_dateFinish = (backlog.date_target as firebase.default.firestore.Timestamp).toDate();
+                          const start = backlog_dateFinish >= (filter_dateFinish as any).start;
+                          const end = backlog_dateFinish <= (filter_dateFinish as any).end;
+                          return start && end;
+                        })
                         // filter status
+                        .filter(backlog => {
+                          const q = filterValue.status ?? [];
+                          return q.includes(backlog.status);
+                        })
                         // filter effort
+                        .filter(backlog => {
+                          const q = filterValue.effort ?? [];
+                          return q.includes(backlog.effort);
+                        })
                         // filter activity
                         .filter(backlog => {
                           const q = filterValue.activity ?? '';
@@ -277,7 +299,9 @@ export class TableComponent implements OnDestroy, OnInit {
   }
 
   delete(id: string) {
-
+    if (confirm('Hapus data ini?')) {
+      this.afs.doc('backlog/'+id).delete();
+    }
   }
 
   openFilterForm() {
